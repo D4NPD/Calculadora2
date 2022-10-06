@@ -3,7 +3,9 @@ const display = document.getElementById('display'),
 display.textContent = "0"
 let enOperacion = false,
     resultado_mostrado = false,
-    numero1, tipoOperacion
+    numero1, tipoOperacion,
+    arrayHistorial = [ ]
+let lista = document.getElementById("lista_historial")
 const calculadora = () =>{
     if(!keys) return 
     keys.addEventListener('click',e =>{
@@ -38,19 +40,23 @@ function resultado(){
     if(resultado_mostrado){
     }else{
         let numero2 = Number(display.textContent),
-        result
+        result,typeOperation
         switch(tipoOperacion){
             case 'sumar':
                 result = numero1 + numero2
+                typeOperation = "+"
                 break
             case 'restar':
                 result = numero1 - numero2
+                typeOperation = "-"
                 break
             case 'multiplicar':
                 result = numero1 * numero2
+                typeOperation = "*"
                 break
             case 'dividir': 
                 result = numero1 / numero2
+                typeOperation = "/"
             default:
                 break
     }
@@ -60,19 +66,36 @@ function resultado(){
             display.textContent = result
         }
         resultado_mostrado = true
+        getHistorial(numero1,typeOperation,numero2,result)
     }
     
 }
 function funcion(tipoFuncion){
     if(tipoFuncion === 'clear-all'){
         display.textContent = "0"
-    }else{
+    }else if(tipoFuncion === 'igual'){
         resultado()
+    }else{
+        
+        arrayHistorial = []
+        lista.innerHTML = ""
     }
     enOperacion =  true
 }
     
-
+function getHistorial(numero1, operacion,numero2,resultado){
+    historial = {
+        numero1: numero1,
+        operacion: operacion,
+        numero2: numero2,
+        resultado: resultado
+    }
+    
+    contenido = ""
+    arrayHistorial.push(historial)
+    arrayHistorial.forEach(op=>contenido+="<li>"+op.numero1+" "+op.operacion+" "+op.numero2+" = "+op.resultado+"</li>")
+    lista.innerHTML = contenido
+}
 
 
 calculadora()
